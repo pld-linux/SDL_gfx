@@ -7,6 +7,7 @@ License:	LGPL
 Group:		Libraries
 Source0:	http://www.ferzkopp.net/Software/%{name}-2.0/%{name}-%{version}.tar.gz
 # Source0-md5:	5e9e8b24d1f576f247a7560e3df4a7de
+Patch0:		%{name}-local-labels.patch
 URL:		http://www.ferzkopp.net/Software/%{name}-2.0/index.html
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf
@@ -71,6 +72,7 @@ Statyczne biblioteki SDL_gfx.
 
 %prep
 %setup -q
+%patch -p1
 
 %build
 rm -f missing acinclude.m4

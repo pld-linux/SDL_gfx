@@ -1,0 +1,755 @@
+--- SDL_gfx-2.0.8/SDL_imageFilter.c.orig	2002-02-10 03:51:21.000000000 +0100
++++ SDL_gfx-2.0.8/SDL_imageFilter.c	2003-08-05 21:56:40.000000000 +0200
+@@ -79,13 +79,13 @@
+        "mov          %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1010:                \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:                \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "paddusb (%%ebx), %%mm1 \n\t"	// mm1=Src1+Src2 (add 8 bytes with saturation)
+       "movq    %%mm1, (%%edi) \n\t"	// store result in Dest
+        "add          $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add          $8, %%ebx \n\t"	// register pointers by 8
+       "add          $8, %%edi \n\t" "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1010 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -156,7 +156,7 @@
+        "mov          %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L21011:                \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:                \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "movq    (%%ebx), %%mm2 \n\t"	// load 8 bytes from Src2 into mm2
+       // --- Byte shift via Word shift ---
+        "psrlw        $1, %%mm1 \n\t"	// shift 4 WORDS of mm1 1 bit to the right
+@@ -169,7 +169,7 @@
+        "add          $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add          $8, %%ebx \n\t"	// register pointers by 8
+       "add          $8, %%edi \n\t" "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L21011 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -236,13 +236,13 @@
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1012:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "psubusb (%%ebx), %%mm1 \n\t"	// mm1=Src1-Src2 (sub 8 bytes with saturation)
+       "movq    %%mm1, (%%edi) \n\t"	// store result in Dest
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1012    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -308,7 +308,7 @@
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1013:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "movq    (%%ebx), %%mm2 \n\t"	// load 8 bytes from Src2 into mm2
+       "psubusb (%%ebx), %%mm1 \n\t"	// mm1=Src1-Src2 (sub 8 bytes with saturation)
+       "psubusb (%%eax), %%mm2 \n\t"	// mm2=Src2-Src1 (sub 8 bytes with saturation)
+@@ -317,7 +317,7 @@
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1013    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -383,7 +383,7 @@
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        "pxor      %%mm0, %%mm0 \n\t"	// zero mm0 register
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1014:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "movq    (%%ebx), %%mm3 \n\t"	// load 8 bytes from Src2 into mm3
+       "movq      %%mm1, %%mm2 \n\t"	// copy mm1 into mm2
+       "movq      %%mm3, %%mm4 \n\t"	// copy mm3 into mm4 
+@@ -407,7 +407,7 @@
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1014    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -476,13 +476,13 @@
+       "mov %0, %%edi \n\t"	// load Dest address into edi
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L10141:        \n\t" "mov  (%%edx), %%al \n\t"	// load a byte from Src1
++      "1:        \n\t" "mov  (%%edx), %%al \n\t"	// load a byte from Src1
+       "mulb (%%esi)       \n\t"	// mul with a byte from Src2
+-       ".L10142:           \n\t" "mov %%al, (%%edi)  \n\t"	// move a byte result to Dest
++       "mov %%al, (%%edi)  \n\t"	// move a byte result to Dest
+        "inc %%edx \n\t"		// increment Src1, Src2, Dest
+       "inc %%esi \n\t"		// pointer registers by one
+       "inc %%edi \n\t" "dec %%ecx      \n\t"	// decrease loop counter
+-      "jnz .L10141    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+       "m"(Src1),		// %2
+@@ -544,7 +544,7 @@
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        "pxor      %%mm0, %%mm0 \n\t"	// zero mm0 register
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1015:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "movq    (%%ebx), %%mm3 \n\t"	// load 8 bytes from Src2 into mm3
+       "movq      %%mm1, %%mm2 \n\t"	// copy mm1 into mm2
+       "movq      %%mm3, %%mm4 \n\t"	// copy mm3 into mm4 
+@@ -561,7 +561,7 @@
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1015    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -629,7 +629,7 @@
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        "pxor      %%mm0, %%mm0 \n\t"	// zero mm0 register
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1016:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "movq    (%%ebx), %%mm3 \n\t"	// load 8 bytes from Src2 into mm3
+       "movq      %%mm1, %%mm2 \n\t"	// copy mm1 into mm2
+       "movq      %%mm3, %%mm4 \n\t"	// copy mm3 into mm4 
+@@ -648,7 +648,7 @@
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1016    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -715,13 +715,13 @@
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L1017:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:         \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "pand    (%%ebx), %%mm1 \n\t"	// mm1=Src1&Src2
+       "movq    %%mm1, (%%edi) \n\t"	// store result in Dest
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L1017    \n\t"	// check loop termination, proceed if required
++      "jnz 1b    \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -787,13 +787,13 @@
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L91017:        \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:        \n\t" "movq    (%%eax), %%mm1 \n\t"	// load 8 bytes from Src1 into mm1
+       "por     (%%ebx), %%mm1 \n\t"	// mm1=Src1|Src2
+       "movq    %%mm1, (%%edi) \n\t"	// store result in Dest
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%ebx \n\t"	// register pointers by 8
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L91017   \n\t"	// check loop termination, proceed if required
++      "jnz 1b   \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+@@ -855,17 +855,17 @@
+       "mov %0, %%edi \n\t"	// load Dest address into edi
+        "mov %3, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+        ".align 16     \n\t"	// 16 byte allignment of the loop entry
+-      ".L10191:      \n\t" "mov  (%%esi), %%bl  \n\t"	// load a byte from Src2
++      "1:      \n\t" "mov  (%%esi), %%bl  \n\t"	// load a byte from Src2
+       "cmp       $0, %%bl  \n\t"	// check if it zero
+-      "jnz .L10192         \n\t" "movb  $255, (%%edi) \n\t"	// division by zero = 255 !!!
+-      "jmp  .L10193        \n\t" ".L10192:            \n\t" "xor   %%ah, %%ah    \n\t"	// prepare AX, zero AH register
++      "jnz 2f         \n\t" "movb  $255, (%%edi) \n\t"	// division by zero = 255 !!!
++      "jmp  3f        \n\t" "2:            \n\t" "xor   %%ah, %%ah    \n\t"	// prepare AX, zero AH register
+       "mov   (%%edx), %%al \n\t"	// load a byte from Src1 into AL
+       "div   %%bl          \n\t"	// divide AL by BL
+       "mov   %%al, (%%edi) \n\t"	// move a byte result to Dest
+-       ".L10193:            \n\t" "inc %%edx \n\t"	// increment Src1, Src2, Dest
++       "3:            \n\t" "inc %%edx \n\t"	// increment Src1, Src2, Dest
+       "inc %%esi \n\t"		// pointer registers by one
+       "inc %%edi \n\t" "dec %%ecx    \n\t"	// decrease loop counter
+-      "jnz .L10191  \n\t"	// check loop termination, proceed if required
++      "jnz 1b  \n\t"	// check loop termination, proceed if required
+        "popa \n\t":"=m" (Dest)	// %0
+       :"m"(Src2),		// %1
+       "m"(Src1),		// %2
+@@ -902,12 +902,12 @@
+        "mov %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16       \n\t"	// 16 byte allignment of the loop entry
+-      ".L91117:        \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into mm1
++      "1:        \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into mm1
+       "pxor      %%mm1, %%mm0 \n\t"	// negate mm0 by xoring with mm1
+       "movq    %%mm0, (%%edi) \n\t"	// store result in Dest
+        "add $8, %%eax \n\t"	// increase Src1, Src2 and Dest 
+       "add $8, %%edi \n\t" "dec %%ecx     \n\t"	// decrease loop counter
+-      "jnz .L91117   \n\t"	// check loop termination, proceed if required
++      "jnz 1b   \n\t"	// check loop termination, proceed if required
+        "emms          \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -975,13 +975,13 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1021:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
++      "1:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
+       "paddusb   %%mm1, %%mm0 \n\t"	// MM0=SrcDest+C (add 8 bytes with saturation)
+       "movq    %%mm0, (%%edi) \n\t"	// store result in Dest
+        "add          $8, %%eax \n\t"	// increase Dest register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1021 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1059,7 +1059,7 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1022:                \n\t" "movq    (%%eax), %%mm2 \n\t"	// load 8 bytes from Src1 into MM2
++      "1:                \n\t" "movq    (%%eax), %%mm2 \n\t"	// load 8 bytes from Src1 into MM2
+       "psrlw        $1, %%mm2 \n\t"	// shift 4 WORDS of MM2 1 bit to the right
+       //    "pand      %%mm0, %%mm2 \n\t"    // apply Mask to 8 BYTES of MM2
+       ".byte     0x0f, 0xdb, 0xd0 \n\t" "paddusb   %%mm1, %%mm2 \n\t"	// MM2=SrcDest+C (add 8 bytes with saturation)
+@@ -1067,7 +1067,7 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1022 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1146,13 +1146,13 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1023:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
++      "1:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
+       "psubusb   %%mm1, %%mm0 \n\t"	// MM0=SrcDest+C (add 8 bytes with saturation)
+       "movq    %%mm0, (%%edi) \n\t"	// store result in SrcDest
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1023 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1221,25 +1221,25 @@
+       "mov           %3, %%cl \n\t"	// load loop counter (N) into CL
+       "movd      %%ecx, %%mm3 \n\t"	// copy (N) into MM3 
+        "pcmpeqb   %%mm1, %%mm1 \n\t"	// generate all 1's in mm1
+-       ".L10240:               \n\t"	// ** Prepare proper bit-Mask in MM1 **
++       "1:               \n\t"	// ** Prepare proper bit-Mask in MM1 **
+        "psrlw        $1, %%mm1 \n\t"	// shift 4 WORDS of MM1 1 bit to the right
+       //    "pand      %%mm0, %%mm1 \n\t"    // apply Mask to 8 BYTES of MM1
+       ".byte     0x0f, 0xdb, 0xc8 \n\t" "dec               %%cl \n\t"	// decrease loop counter
+-      "jnz            .L10240 \n\t"	// check loop termination, proceed if required
++      "jnz            1b \n\t"	// check loop termination, proceed if required
+       // ** Shift all bytes of the image **
+        "mov          %1, %%eax \n\t"	// load Src1 address into eax
+       "mov          %0, %%edi \n\t"	// load Dest address into edi
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10241:               \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
++      "2:               \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
+       "psrlw     %%mm3, %%mm0 \n\t"	// shift 4 WORDS of MM0 (N) bits to the right
+       //    "pand      %%mm1, %%mm0 \n\t"    // apply proper bit-Mask to 8 BYTES of MM0
+       ".byte     0x0f, 0xdb, 0xc1 \n\t" "movq    %%mm0, (%%edi) \n\t"	// store result in SrcDest
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10241 \n\t"	// check loop termination, proceed if required
++      "jnz            2b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1318,8 +1318,8 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        "cmp         $128, %%al \n\t"	// if (C <= 128) execute more efficient code
+-      "jg             .L10251 \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10250:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "jg             1f \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
++      "2:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm0, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm0, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1330,9 +1330,9 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10250 \n\t"	// check loop termination, proceed if required
+-      "jmp            .L10252 \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10251:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "jnz            2b \n\t"	// check loop termination, proceed if required
++      "jmp            3f \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
++      "1:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm0, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm0, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1352,8 +1352,8 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10251 \n\t"	// check loop termination, proceed if required
+-       ".L10252:               \n\t" "emms                   \n\t"	// exit MMX state
++      "jnz            1b \n\t"	// check loop termination, proceed if required
++       "3:               \n\t" "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+       "m"(length),		// %2
+@@ -1433,7 +1433,7 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1026:                \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "1:                \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm0, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm0, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1446,7 +1446,7 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1026 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1521,25 +1521,25 @@
+       "mov           %3, %%cl \n\t"	// load loop counter (N) into CL
+       "movd      %%ecx, %%mm3 \n\t"	// copy (N) into MM3 
+        "pcmpeqb   %%mm1, %%mm1 \n\t"	// generate all 1's in mm1
+-       ".L10270:               \n\t"	// ** Prepare proper bit-Mask in MM1 **
++       "1:               \n\t"	// ** Prepare proper bit-Mask in MM1 **
+        "psllw        $1, %%mm1 \n\t"	// shift 4 WORDS of MM1 1 bit to the left
+       //    "pand      %%mm0, %%mm1 \n\t"    // apply Mask to 8 BYTES of MM1
+       ".byte     0x0f, 0xdb, 0xc8 \n\t" "dec %%cl               \n\t"	// decrease loop counter
+-      "jnz            .L10270 \n\t"	// check loop termination, proceed if required
++      "jnz            1b \n\t"	// check loop termination, proceed if required
+       // ** Shift all bytes of the image **
+        "mov          %1, %%eax \n\t"	// load Src1 address into eax
+       "mov          %0, %%edi \n\t"	// load SrcDest address into edi
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10271:               \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
++      "2:               \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
+       "psllw     %%mm3, %%mm0 \n\t"	// shift 4 WORDS of MM0 (N) bits to the left
+       //    "pand      %%mm1, %%mm0 \n\t"    // apply proper bit-Mask to 8 BYTES of MM0
+       ".byte     0x0f, 0xdb, 0xc1 \n\t" "movq    %%mm0, (%%edi) \n\t"	// store result in Dest
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10271 \n\t"	// check loop termination, proceed if required
++      "jnz            2b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1610,8 +1610,8 @@
+       "mov         %2, %%ecx  \n\t"	// load loop counter (SIZE) into ecx
+       "shr         $3, %%ecx  \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        "cmp           $7, %%al \n\t"	// if (N <= 7) execute more efficient code
+-      "jg             .L10281 \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10280:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "jg             1f \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
++      "2:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm0, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm0, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1622,9 +1622,9 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10280 \n\t"	// check loop termination, proceed if required
+-      "jmp            .L10282 \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L10281:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "jnz            2b \n\t"	// check loop termination, proceed if required
++      "jmp            3f \n\t" ".align 16              \n\t"	// 16 byte allignment of the loop entry
++      "1:               \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm0, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm0, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1644,8 +1644,8 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz            .L10281 \n\t"	// check loop termination, proceed if required
+-       ".L10282:               \n\t" "emms                   \n\t"	// exit MMX state
++      "jnz            1b \n\t"	// check loop termination, proceed if required
++       "3:               \n\t" "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+       "m"(length),		// %2
+@@ -1724,14 +1724,14 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte alignment of the loop entry
+-      ".L1029:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
++      "1:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from SrcDest into MM0
+       "paddusb   %%mm2, %%mm0 \n\t"	// MM0=SrcDest+(0xFF-T) (add 8 bytes with saturation)
+       "pcmpeqb   %%mm1, %%mm0 \n\t"	// binarize 255:0, comparing to 255
+       "movq    %%mm0, (%%edi) \n\t"	// store result in SrcDest
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1029 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1814,7 +1814,7 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1030:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
++      "1:                \n\t" "movq    (%%eax), %%mm0 \n\t"	// load 8 bytes from Src1 into MM0
+       "paddusb   %%mm1, %%mm0 \n\t"	// MM0=SrcDest+(0xFF-Tmax)
+       "psubusb   %%mm7, %%mm0 \n\t"	// MM0=MM0-(0xFF-Tmax+Tmin)
+       "paddusb   %%mm5, %%mm0 \n\t"	// MM0=MM0+Tmin
+@@ -1822,7 +1822,7 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1030 \n\t"	// check loop termination, proceed if required
++      "jnz             1b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -1890,11 +1890,11 @@
+       "mov           %4, %%bx \n\t"	// load Cmax in BX
+       "sub           %5, %%ax \n\t"	// AX = Nmax - Nmin
+       "sub           %3, %%bx \n\t"	// BX = Cmax - Cmin
+-      "jz             .L10311 \n\t"	// check division by zero
++      "jz             1f \n\t"	// check division by zero
+       "xor         %%dx, %%dx \n\t"	// prepare for division, zero DX
+       "div               %%bx \n\t"	// AX = AX/BX
+-      "jmp            .L10312 \n\t" ".L10311:               \n\t" "mov         $255, %%ax \n\t"	// if div by zero, assume result max. byte value
+-       ".L10312:               \n\t"	// ** Duplicate AX in 4 words of MM0 **
++      "jmp            2f \n\t" "1:               \n\t" "mov         $255, %%ax \n\t"	// if div by zero, assume result max. byte value
++       "2:               \n\t"	// ** Duplicate AX in 4 words of MM0 **
+        "mov         %%ax, %%bx \n\t"	// copy AX into BX
+       "shl         $16, %%eax \n\t"	// shift 2 bytes of EAX left
+       "mov         %%bx, %%ax \n\t"	// copy BX into AX
+@@ -1923,7 +1923,7 @@
+       "mov          %2, %%ecx \n\t"	// load loop counter (SIZE) into ecx
+       "shr          $3, %%ecx \n\t"	// counter/8 (MMX loads 8 bytes at a time)
+        ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-      ".L1031:                \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
++      "3:                \n\t" "movq    (%%eax), %%mm3 \n\t"	// load 8 bytes from Src1 into MM3
+       "movq      %%mm3, %%mm4 \n\t"	// copy MM3 into MM4 
+       "punpcklbw %%mm7, %%mm3 \n\t"	// unpack low  bytes of SrcDest into words
+       "punpckhbw %%mm7, %%mm4 \n\t"	// unpack high bytes of SrcDest into words
+@@ -1947,7 +1947,7 @@
+        "add          $8, %%eax \n\t"	// increase Src1 register pointer by 8
+       "add          $8, %%edi \n\t"	// increase Dest register pointer by 8
+       "dec              %%ecx \n\t"	// decrease loop counter
+-      "jnz             .L1031 \n\t"	// check loop termination, proceed if required
++      "jnz             3b \n\t"	// check loop termination, proceed if required
+        "emms                   \n\t"	// exit MMX state
+       "popa                   \n\t":"=m" (Dest)	// %0
+       :"m"(Src1),		// %1
+@@ -2041,10 +2041,10 @@
+ 	   "mov          %2, %%edx \n\t"	// initialize ROWS counter
+ 	  "sub          $2, %%edx \n\t"	// do not use first and last row
+ // ---
+-	  ".L10320:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
+ 	  "sub          $2, %%ecx \n\t"	// do not use first and last column
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10322:               \n\t"
++	  "2:               \n\t"
+ // ---
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the image first row
+ 	  "add       %%eax, %%esi \n\t"	// move one row below
+@@ -2085,11 +2085,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10322 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $2, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $2, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%edx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10320 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2132,10 +2132,10 @@
+ 	   "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $4, %%ebx \n\t"	// do not use first 2 and last 2 rows
+ // ---
+-	  ".L10330:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $4, %%ecx \n\t"	// do not use first 2 and last 2 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10332:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -2235,11 +2235,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10332 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $4, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $4, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10330 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2280,10 +2280,10 @@
+ 	  "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $6, %%ebx \n\t"	// do not use first 3 and last 3 rows
+ // ---
+-	  ".L10340:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $6, %%ecx \n\t"	// do not use first 3 and last 3 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10342:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -2411,11 +2411,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10342 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $6, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $6, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10340 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2456,10 +2456,10 @@
+ 	  "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $8, %%ebx \n\t"	// do not use first 4 and last 4 rows
+ // ---
+-	  ".L10350:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $8, %%ecx \n\t"	// do not use first 4 and last 4 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10352:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -2678,11 +2678,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10352 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $8, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $8, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10350 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2729,10 +2729,10 @@
+ 	   "mov          %2, %%edx \n\t"	// initialize ROWS counter
+ 	  "sub          $2, %%edx \n\t"	// do not use first and last row
+ // ---
+-	  ".L10360:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
+ 	  "sub          $2, %%ecx \n\t"	// do not use first and last column
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10362:               \n\t"
++	  "2:               \n\t"
+ // ---
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the image first row
+ 	  "add       %%eax, %%esi \n\t"	// move one row below
+@@ -2765,11 +2765,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10362 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $2, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $2, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%edx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10360 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2812,10 +2812,10 @@
+ 	   "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $4, %%ebx \n\t"	// do not use first 2 and last 2 rows
+ // ---
+-	  ".L10370:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $4, %%ecx \n\t"	// do not use first 2 and last 2 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10372:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -2914,11 +2914,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10372 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $4, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $4, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10370 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -2959,10 +2959,10 @@
+ 	  "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $6, %%ebx \n\t"	// do not use first 3 and last 3 rows
+ // ---
+-	  ".L10380:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $6, %%ecx \n\t"	// do not use first 3 and last 3 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10382:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -3093,11 +3093,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10382 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $6, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $6, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10380 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -3138,10 +3138,10 @@
+ 	  "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "add       %%eax, %%edi \n\t" "mov          %2, %%ebx \n\t"	// initialize ROWS counter
+ 	  "sub          $8, %%ebx \n\t"	// do not use first 4 and last 4 rows
+ // ---
+-	  ".L10390:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
++	  "1:               \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMNS counter
+ 	  "sub          $8, %%ecx \n\t"	// do not use first 4 and last 4 columns
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10392:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
++	  "2:               \n\t" "pxor      %%mm7, %%mm7 \n\t"	// zero MM7 (accumulator)
+ 	  "movd      %%esi, %%mm6 \n\t"	// save ESI in MM6
+ // --- 1
+ 	  "movq    (%%esi), %%mm1 \n\t"	// load 8 bytes of the Src
+@@ -3376,11 +3376,11 @@
+ 	  "inc              %%edi \n\t"	// move Dest pointer to the next pixel
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10392 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "add          $8, %%esi \n\t"	// move to the next row in Src
+ 	  "add          $8, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%ebx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10390 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -3419,12 +3419,12 @@
+ 	   "mov          %2, %%edx \n\t"	// initialize ROWS counter
+ 	  "sub          $2, %%edx \n\t"	// do not use first and last rows
+ // ---
+-	  ".L10400:                \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
++	  "1:                \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
+ 	  "shr          $3, %%ecx \n\t"	// EBX/8 (MMX loads 8 bytes at a time)
+ 	   "mov       %%esi, %%ebx \n\t"	// save ESI in EBX
+ 	  "movd      %%edi, %%mm1 \n\t"	// save EDI in MM1
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10402:               \n\t"
++	  "2:               \n\t"
+ // ---
+ 	  "movq    (%%esi), %%mm4 \n\t"	// load 8 bytes from Src
+ 	  "movq      %%mm4, %%mm5 \n\t"	// save MM4 in MM5
+@@ -3502,13 +3502,13 @@
+ 	  "add $8,          %%edi \n\t"	// move Dest pointer to the next 8 pixels
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10402 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "mov       %%ebx, %%esi \n\t"	// restore most left current row Src  address
+ 	  "movd      %%mm1, %%edi \n\t"	// restore most left current row Dest address
+ 	  "add       %%eax, %%esi \n\t"	// move to the next row in Src
+ 	  "add       %%eax, %%edi \n\t"	// move to the next row in Dest
+ 	   "dec              %%edx \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10400 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
+@@ -3547,12 +3547,12 @@
+ 	  // initialize ROWS counter
+ 	  "subl            $2, %2 \n\t"	// do not use first and last rows
+ // ---
+-	  ".L10410:                \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
++	  "1:                \n\t" "mov       %%eax, %%ecx \n\t"	// initialize COLUMS counter
+ 	  "shr          $3, %%ecx \n\t"	// EBX/8 (MMX loads 8 bytes at a time)
+ 	   "mov       %%esi, %%ebx \n\t"	// save ESI in EBX
+ 	  "mov       %%edi, %%edx \n\t"	// save EDI in EDX
+ 	   ".align 16              \n\t"	// 16 byte allignment of the loop entry
+-	  ".L10412:               \n\t"
++	  "2:               \n\t"
+ // ---
+ 	  "movq    (%%esi), %%mm4 \n\t"	// load 8 bytes from Src
+ 	  "movq      %%mm4, %%mm5 \n\t"	// save MM4 in MM5
+@@ -3642,13 +3642,13 @@
+ 	  "add $8,          %%edi \n\t"	// move Dest pointer to the next 8 pixels
+ // ---
+ 	  "dec              %%ecx \n\t"	// decrease loop counter COLUMNS
+-	  "jnz            .L10412 \n\t"	// check loop termination, proceed if required
++	  "jnz            2b \n\t"	// check loop termination, proceed if required
+ 	   "mov       %%ebx, %%esi \n\t"	// restore most left current row Src  address
+ 	  "mov       %%edx, %%edi \n\t"	// restore most left current row Dest address
+ 	  "add       %%eax, %%esi \n\t"	// move to the next row in Src
+ 	  "add       %%eax, %%edi \n\t"	// move to the next row in Dest
+ 	   "decl                %2 \n\t"	// decrease loop counter ROWS
+-	  "jnz            .L10410 \n\t"	// check loop termination, proceed if required
++	  "jnz            1b \n\t"	// check loop termination, proceed if required
+ // ---
+ 	  "emms                   \n\t"	// exit MMX state
+ 	  "popa                   \n\t":"=m" (Dest)	// %0
