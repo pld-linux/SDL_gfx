@@ -6,6 +6,7 @@ Release:	3
 License:	LGPL
 Group:		Libraries
 Source0:	http://www.ferzkopp.net/Software/%{name}-2.0/%{name}-%{version}.tar.gz
+# Source0-md5:	45bbe736da6f25db917eab9801cb085e
 URL:		http://www.ferzkopp.net/Software/%{name}-2.0/index.html
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf
