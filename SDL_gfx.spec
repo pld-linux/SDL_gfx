@@ -1,12 +1,12 @@
 Summary:	SDL graphics drawing primitives and other support functions
 Summary(pl):	Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
-Version:	2.0.10
+Version:	2.0.11
 Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://www.ferzkopp.net/~aschiffler/Software/%{name}-2.0/%{name}-%{version}.tar.gz
-# Source0-md5:	291b06426a3afe42ecac8473be2505d1
+Source0:	http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
+# Source0-md5:	10f6432ede2b239796f2924bdc7224b4
 Patch0:		%{name}-local-labels.patch
 URL:		http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/index.html
 BuildRequires:	SDL-devel >= 1.2.0
@@ -18,8 +18,6 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%define		_includedir	/usr/include/SDL
 
 %description
 The SDL_gfx library evolved out of the SDL_gfxPrimitives code.
@@ -49,7 +47,7 @@ napisana w czystym C, mo¿e te¿ byæ u¿ywana w kodzie C++.
 Summary:	Header files and more to develop SDL_gfx applications
 Summary(pl):	Pliki nag³ówkowe do rozwijania aplikacji u¿ywaj±cych SDL_gfx
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	SDL-devel
 
 %description devel
@@ -62,7 +60,7 @@ Pliki nag³ówkowe do rozwijania aplikacji u¿ywaj±cych SDL_gfx.
 Summary:	Static SDL_gfx libraries
 Summary(pl):	Statyczne biblioteki SDL_gfx
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static SDL_gfx libraries.
@@ -75,16 +73,14 @@ Statyczne biblioteki SDL_gfx.
 %patch -p1
 
 %build
-rm -f missing acinclude.m4
+rm -f acinclude.m4
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
 
-%ifarch %{ix86}
-%configure
-%else
 %configure \
+%ifnarch %{ix86}
 	--disable-mmx
 %endif
 
@@ -112,7 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs/*
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
-%{_includedir}/*
+%{_includedir}/SDL/*
 
 %files static
 %defattr(644,root,root,755)
