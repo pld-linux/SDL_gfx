@@ -17,6 +17,7 @@ BuildRequires:	libtool
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_includedir	/usr/include/SDL
 
 %description
 The SDL_gfx library evolved out of the SDL_gfxPrimitives code.
@@ -90,8 +91,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-gzip -9nf README AUTHORS ChangeLog
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -100,12 +99,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc README AUTHORS ChangeLog
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%doc *.gz Docs
+%doc Docs/*
 %attr(755,root,root) %{_libdir}/lib*.so
+%{_libdir}/lib*.la
 %{_includedir}/*
 
 %files static
