@@ -1,12 +1,12 @@
 Summary:	SDL graphics drawing primitives and other support functions
 Summary(pl):	Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
-Version:	2.0.11
+Version:	2.0.12
 Release:	1
 License:	LGPL
 Group:		Libraries
 Source0:	http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
-# Source0-md5:	10f6432ede2b239796f2924bdc7224b4
+# Source0-md5:	83cb6b89e2197cf3f174e6e086605eaf
 Patch0:		%{name}-local-labels.patch
 URL:		http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/index.html
 BuildRequires:	SDL-devel >= 1.2.0
