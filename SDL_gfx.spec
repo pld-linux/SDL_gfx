@@ -5,10 +5,10 @@ Version:	2.0.13
 Release:	1
 License:	LGPL
 Group:		Libraries
-Source0:	http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
+Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
 # Source0-md5:	b1ce778232db0b1979695f0a5a945a13
 Patch0:		%{name}-local-labels.patch
-URL:		http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/index.html
+URL:		http://www.ferzkopp.net/Software/SDL_gfx-2.0/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf
 BuildRequires:	automake
