@@ -10,7 +10,7 @@ Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
 Patch0:		%{name}-local-labels.patch
 URL:		http://www.ferzkopp.net/Software/SDL_gfx-2.0/
 BuildRequires:	SDL-devel >= 1.2.0
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.59-9
 BuildRequires:	automake
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng >= 1.0.8
