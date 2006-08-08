@@ -70,7 +70,7 @@ Statyczne biblioteki SDL_gfx.
 
 %prep
 %setup -q
-%patch -p1
+%patch0 -p1
 
 %build
 rm -f acinclude.m4
