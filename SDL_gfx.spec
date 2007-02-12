@@ -1,5 +1,5 @@
 Summary:	SDL graphics drawing primitives and other support functions
-Summary(pl.UTF-8):   Funkcje rysowania grafiki i inne dla SDL
+Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
 Version:	2.0.13
 Release:	1
@@ -45,7 +45,7 @@ napisana w czystym C, może też być używana w kodzie C++.
 
 %package devel
 Summary:	Header files and more to develop SDL_gfx applications
-Summary(pl.UTF-8):   Pliki nagłówkowe do rozwijania aplikacji używających SDL_gfx
+Summary(pl.UTF-8):	Pliki nagłówkowe do rozwijania aplikacji używających SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	SDL-devel
@@ -58,7 +58,7 @@ Pliki nagłówkowe do rozwijania aplikacji używających SDL_gfx.
 
 %package static
 Summary:	Static SDL_gfx libraries
-Summary(pl.UTF-8):   Statyczne biblioteki SDL_gfx
+Summary(pl.UTF-8):	Statyczne biblioteki SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
