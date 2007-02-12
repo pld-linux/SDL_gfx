@@ -1,5 +1,5 @@
 Summary:	SDL graphics drawing primitives and other support functions
-Summary(pl):	Funkcje rysowania grafiki i inne dla SDL
+Summary(pl.UTF-8):   Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
 Version:	2.0.13
 Release:	1
@@ -31,21 +31,21 @@ The current components of the SDL_gfx library are:
 The library is backwards compatible to the above mentioned code. It's
 is written in plain C and can be used in C++ code.
 
-%description -l pl
-Biblioteka SDL_gfx wyewoluowa≥a z kodu SDL_gfxPrimitives.
+%description -l pl.UTF-8
+Biblioteka SDL_gfx wyewoluowa≈Ça z kodu SDL_gfxPrimitives.
 
-Aktualnie SDL_gfx zawiera nastÍpuj±ce komponenty:
+Aktualnie SDL_gfx zawiera nastƒôpujƒÖce komponenty:
 - prymitywy graficzne (SDL_gfxPrimitives.h)
 - Rotozoomer (SDL_rotozoom.h)
-- kontrola szybko∂ci rysowania obrazu (SDL_framerate.h)
-- filtry obrazÛw uøywaj±ce MMX (SDL_imageFilter.h).
+- kontrola szybko≈õci rysowania obrazu (SDL_framerate.h)
+- filtry obraz√≥w u≈ºywajƒÖce MMX (SDL_imageFilter.h).
 
-Biblioteka jest wstecznie kompatybilna z wyøej wspomnianym kodem. Jest
-napisana w czystym C, moøe teø byÊ uøywana w kodzie C++.
+Biblioteka jest wstecznie kompatybilna z wy≈ºej wspomnianym kodem. Jest
+napisana w czystym C, mo≈ºe te≈º byƒá u≈ºywana w kodzie C++.
 
 %package devel
 Summary:	Header files and more to develop SDL_gfx applications
-Summary(pl):	Pliki nag≥Ûwkowe do rozwijania aplikacji uøywaj±cych SDL_gfx
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe do rozwijania aplikacji u≈ºywajƒÖcych SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	SDL-devel
@@ -53,19 +53,19 @@ Requires:	SDL-devel
 %description devel
 Header files and more to develop SDL_gfx applications.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe do rozwijania aplikacji uøywaj±cych SDL_gfx.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe do rozwijania aplikacji u≈ºywajƒÖcych SDL_gfx.
 
 %package static
 Summary:	Static SDL_gfx libraries
-Summary(pl):	Statyczne biblioteki SDL_gfx
+Summary(pl.UTF-8):   Statyczne biblioteki SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static SDL_gfx libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki SDL_gfx.
 
 %prep
