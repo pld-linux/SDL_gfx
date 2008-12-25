@@ -109,7 +109,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc Docs/*
 %attr(755,root,root) %{_libdir}/libSDL_gfx.so
 %{_libdir}/libSDL_gfx.la
-%{_includedir}/SDL/*
+%{_includedir}/SDL/SDL_framerate.h
+%{_includedir}/SDL/SDL_gfx*.h
+%{_includedir}/SDL/SDL_imageFilter.h
+%{_includedir}/SDL/SDL_rotozoom.h
 
 %files static
 %defattr(644,root,root,755)
