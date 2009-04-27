@@ -1,12 +1,12 @@
 Summary:	SDL graphics drawing primitives and other support functions
 Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
-Version:	2.0.18
+Version:	2.0.19
 Release:	1
-License:	LGPL
+License:	LGPL v2.1+
 Group:		Libraries
 Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
-# Source0-md5:	b107fd478d3d1269d7a6ff42906f0482
+# Source0-md5:	cf01ad6539ceea65887fc9ebdfe04b83
 Patch0:		%{name}-local-labels.patch
 URL:		http://www.ferzkopp.net/Software/SDL_gfx-2.0/
 BuildRequires:	SDL-devel >= 1.2.0
@@ -16,6 +16,7 @@ BuildRequires:	libjpeg-devel
 BuildRequires:	libpng >= 1.0.8
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool
+BuildRequires:	pkgconfig
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -102,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README AUTHORS ChangeLog
 %attr(755,root,root) %{_libdir}/libSDL_gfx.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libSDL_gfx.so.0
+%attr(755,root,root) %ghost %{_libdir}/libSDL_gfx.so.13
 
 %files devel
 %defattr(644,root,root,755)
@@ -113,6 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/SDL/SDL_gfx*.h
 %{_includedir}/SDL/SDL_imageFilter.h
 %{_includedir}/SDL/SDL_rotozoom.h
+%{_pkgconfigdir}/SDL_gfx.pc
 
 %files static
 %defattr(644,root,root,755)
