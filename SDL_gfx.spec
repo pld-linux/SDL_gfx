@@ -5,21 +5,18 @@ Version:	2.0.21
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
+#Source0Download: http://www.ferzkopp.net/joomla/software-mainmenu-14/4-ferzkopps-linux-software/19-sdlgfx
 Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
 # Source0-md5:	f3794d809ed6a415fb20dcc4c8ab9f5e
 Patch0:		%{name}-local-labels.patch
-URL:		http://www.ferzkopp.net/Software/SDL_gfx-2.0/
+URL:		http://www.ferzkopp.net/joomla/software-mainmenu-14/4-ferzkopps-linux-software/19-sdlgfx
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.59-9
 BuildRequires:	automake
-BuildRequires:	libjpeg-devel
-BuildRequires:	libpng >= 1.0.8
-BuildRequires:	libtiff-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.566
 BuildRequires:	sed >= 4.0
-BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -77,7 +74,6 @@ Statyczne biblioteki SDL_gfx.
 %patch0 -p1
 
 %build
-rm -f acinclude.m4
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
