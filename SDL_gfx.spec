@@ -1,15 +1,15 @@
 Summary:	SDL graphics drawing primitives and other support functions
 Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne dla SDL
 Name:		SDL_gfx
-Version:	2.0.22
-Release:	2
+Version:	2.0.26
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
-#Source0Download: http://www.ferzkopp.net/joomla/software-mainmenu-14/4-ferzkopps-linux-software/19-sdlgfx
+#Source0Download: http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/
 Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
-# Source0-md5:	330f291f1f09a1bdf397c9b40d92ca41
+# Source0-md5:	0b3b5ab5f9e7d10f1faf14d4255db6ba
 Patch0:		%{name}-local-labels.patch
-URL:		http://www.ferzkopp.net/joomla/software-mainmenu-14/4-ferzkopps-linux-software/19-sdlgfx
+URL:		http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/
 BuildRequires:	SDL-devel >= 1.2.0
 BuildRequires:	autoconf >= 2.59-9
 BuildRequires:	automake
@@ -102,7 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README AUTHORS ChangeLog
 %attr(755,root,root) %{_libdir}/libSDL_gfx.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libSDL_gfx.so.13
+%attr(755,root,root) %ghost %{_libdir}/libSDL_gfx.so.16
 
 %files devel
 %defattr(644,root,root,755)
