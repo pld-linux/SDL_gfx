@@ -70,6 +70,7 @@ Statyczna biblioteka SDL_gfx.
 Summary:	API documentation for SDL_gfx library
 Summary(pl.UTF-8):	Dokumentacja API biblioteki SDL_gfx
 Group:		Documentation
+BuildArch:	noarch
 
 %description apidocs
 API documentation for SDL_gfx library.
