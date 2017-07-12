@@ -1,9 +1,9 @@
-Summary:	SDL graphics drawing primitives and other support functions
-Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne dla SDL
+Summary:	SDL graphics drawing primitives and other supporting functions
+Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne pomocnicze dla SDL
 Name:		SDL_gfx
 Version:	2.0.26
-Release:	1
-License:	LGPL v2.1+
+Release:	2
+License:	ZLib (BSD-like)
 Group:		Libraries
 #Source0Download: http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/
 Source0:	http://www.ferzkopp.net/Software/SDL_gfx-2.0/%{name}-%{version}.tar.gz
@@ -15,8 +15,6 @@ BuildRequires:	autoconf >= 2.59-9
 BuildRequires:	automake
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.566
-BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -48,7 +46,7 @@ Summary:	Header files and more to develop SDL_gfx applications
 Summary(pl.UTF-8):	Pliki nagłówkowe do rozwijania aplikacji używających SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	SDL-devel
+Requires:	SDL-devel >= 1.2.0
 
 %description devel
 Header files and more to develop SDL_gfx applications.
@@ -57,20 +55,30 @@ Header files and more to develop SDL_gfx applications.
 Pliki nagłówkowe do rozwijania aplikacji używających SDL_gfx.
 
 %package static
-Summary:	Static SDL_gfx libraries
-Summary(pl.UTF-8):	Statyczne biblioteki SDL_gfx
+Summary:	Static SDL_gfx library
+Summary(pl.UTF-8):	Statyczna biblioteka SDL_gfx
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static SDL_gfx libraries.
+Static SDL_gfx library.
 
 %description static -l pl.UTF-8
-Statyczne biblioteki SDL_gfx.
+Statyczna biblioteka SDL_gfx.
+
+%package apidocs
+Summary:	API documentation for SDL_gfx library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki SDL_gfx
+Group:		Documentation
+
+%description apidocs
+API documentation for SDL_gfx library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki SDL_gfx.
 
 %prep
 %setup -q
-%undos SDL_imageFilter.c
 %patch0 -p1
 
 %build
@@ -100,13 +108,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README AUTHORS ChangeLog
+%doc AUTHORS COPYING ChangeLog LICENSE README
 %attr(755,root,root) %{_libdir}/libSDL_gfx.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libSDL_gfx.so.16
 
 %files devel
 %defattr(644,root,root,755)
-%doc Docs/*
 %attr(755,root,root) %{_libdir}/libSDL_gfx.so
 %{_libdir}/libSDL_gfx.la
 %{_includedir}/SDL/SDL_framerate.h
@@ -118,3 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libSDL_gfx.a
+
+%files apidocs
+%defattr(644,root,root,755)
+%doc Docs/{Screenshots,html,*.png,index.html}
