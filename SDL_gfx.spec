@@ -2,7 +2,7 @@ Summary:	SDL graphics drawing primitives and other supporting functions
 Summary(pl.UTF-8):	Funkcje rysowania grafiki i inne pomocnicze dla SDL
 Name:		SDL_gfx
 Version:	2.0.26
-Release:	2
+Release:	3
 License:	ZLib (BSD-like)
 Group:		Libraries
 #Source0Download: http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx/
